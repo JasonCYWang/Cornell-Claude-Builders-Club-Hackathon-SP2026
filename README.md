@@ -15,13 +15,11 @@ This repository now includes a standard Python project structure for building a 
 
 ## Quick Start
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-pytest
-python -m new_software.main "TaskPilot"
-```
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate
+pip install -r requirements.txt
+python app.py
 
 ## Linting and Type Checking
 
