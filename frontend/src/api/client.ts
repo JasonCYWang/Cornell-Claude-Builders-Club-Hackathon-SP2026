@@ -9,6 +9,16 @@ import type {
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export const api = {
+  saveProfile: async (payload: Record<string, unknown>) => {
+    const res = await fetch(`${BASE}/profile`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error('Profile save failed')
+    return (await res.json()) as unknown
+  },
+
   uploadJournal: async (blob: Blob, durationStr: string, note?: string) => {
     const form = new FormData()
     form.append('audio', blob, 'journal.webm')

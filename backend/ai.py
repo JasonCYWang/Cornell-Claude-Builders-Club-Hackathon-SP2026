@@ -198,6 +198,7 @@ async def generate_future_self_letter(
     journal_summary: str,
     pattern: str,
     journal_background: str = "",
+    profile_context: str = "",
     *,
     roast_mode: bool = False,
     reality_check: bool = False,
@@ -222,8 +223,15 @@ Rules:
 - Never use diagnose.
 - 140-220 words.
 - No chat format, no bullets.
+- The letter MUST be grounded in the provided journal background. Use it as primary evidence.
+- Include 2-4 concrete specifics pulled from the journal background (events, tasks, people, places, worries, goals, recurring habits).
+- Include 1-2 short verbatim snippets (3-8 words) copied from the journal background in quotation marks.
+- If the journal background is thin, be honest about what is known vs unknown, but still reference what *is* there.
+- Avoid vague motivational language. Do NOT use phrases like: "blueprint", "bedrock", "core operating system", "grand saga", "everything you will build".
+- Do not praise "consistency" generically—name what they actually did or said.
 
 Context:
+- Who they are: {profile_context or "[not provided]"}
 - Pattern: {pattern}
 - Summary: {journal_summary}
 - Journal background (recent entries, oldest→newest):

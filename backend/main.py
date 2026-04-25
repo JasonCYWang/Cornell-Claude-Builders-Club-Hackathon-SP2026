@@ -7,7 +7,7 @@ import uuid
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
 from ai import (
@@ -17,10 +17,22 @@ from ai import (
     generate_future_self_letter,
 )
 from database import engine, get_db
-from models import Base, JournalEntry
+from models import Base, JournalEntry, UserProfile
 from transcribe import transcribe_audio
 
 Base.metadata.create_all(bind=engine)
+
+# Lightweight SQLite migration for hackathon iteration.
+try:
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                "ALTER TABLE user_profile ADD COLUMN questionnaire_json TEXT"
+            )
+        )
+except Exception:
+    # Column probably already exists (or table doesn't exist yet).
+    pass
 
 app = FastAPI(title="FutureMirror API")
 
@@ -91,6 +103,66 @@ def entry_to_dict(e: JournalEntry) -> dict:
         "patternDetected": e.pattern_detected,
         "nextQuestion": e.next_question,
     }
+
+def profile_to_dict(p: UserProfile) -> dict:
+    focus_areas: list[str] = []
+    if p.focus:
+        try:
+            parsed = json.loads(p.focus)
+            if isinstance(parsed, list):
+                focus_areas = [str(x) for x in parsed if str(x).strip()]
+        except Exception:
+            pass
+    questionnaire: dict = {}
+    if getattr(p, "questionnaire_json", None):
+        try:
+            parsed = json.loads(p.questionnaire_json or "{}")
+            if isinstance(parsed, dict):
+                questionnaire = parsed
+        except Exception:
+            pass
+
+    return {
+        "firstName": p.first_name or "",
+        "lifeStage": p.life_stage or "",
+        "focusAreas": focus_areas,
+        "questionnaire": questionnaire,
+    }
+
+
+@app.get("/profile")
+def get_profile(db: Session = Depends(get_db)):
+    row = db.query(UserProfile).filter(UserProfile.id == "me").first()
+    if not row:
+        return {"firstName": "", "lifeStage": "", "focusAreas": []}
+    return profile_to_dict(row)
+
+
+@app.post("/profile")
+def upsert_profile(payload: dict, db: Session = Depends(get_db)):
+    first_name = (payload.get("firstName") or "").strip() or None
+    life_stage = (payload.get("lifeStage") or "").strip() or None
+    focus_areas = payload.get("focusAreas") or []
+    if not isinstance(focus_areas, list):
+        focus_areas = []
+    focus_areas = [str(x).strip() for x in focus_areas if str(x).strip()]
+
+    row = db.query(UserProfile).filter(UserProfile.id == "me").first()
+    if not row:
+        row = UserProfile(id="me")
+        db.add(row)
+    row.first_name = first_name
+    row.life_stage = life_stage
+    row.focus = json.dumps(focus_areas)
+    # Store the full questionnaire answers so future-self can use them.
+    try:
+        row.questionnaire_json = json.dumps(payload)
+    except Exception:
+        row.questionnaire_json = None
+    row.updated_at = datetime.datetime.utcnow()
+    db.commit()
+    db.refresh(row)
+    return profile_to_dict(row)
 
 
 @app.post("/journal/upload")
@@ -201,6 +273,43 @@ async def future_self_reflection(payload: dict, db: Session = Depends(get_db)):
     roast_mode = bool(payload.get("roastMode"))
     reality_check = bool(payload.get("realityCheck"))
 
+    profile_row = db.query(UserProfile).filter(UserProfile.id == "me").first()
+    profile_ctx = ""
+    if profile_row:
+        p = profile_to_dict(profile_row)
+        bits: list[str] = []
+        if p.get("firstName"):
+            bits.append(f"Name: {p['firstName']}")
+        if p.get("lifeStage"):
+            bits.append(f"Life stage: {p['lifeStage']}")
+        if p.get("focusAreas"):
+            bits.append("Focus areas: " + ", ".join(p["focusAreas"]))
+        q = p.get("questionnaire") or {}
+        if isinstance(q, dict):
+            mood = (q.get("mood") or "").strip()
+            biggest_stress = (q.get("biggestStress") or "").strip()
+            reflection_frequency = (q.get("reflectionFrequency") or "").strip()
+            one_year = (q.get("oneYearVision") or "").strip()
+            five_year = (q.get("fiveYearVision") or "").strip()
+            more_of = (q.get("moreOf") or "").strip()
+            future_feeling = (q.get("futureSelfFeeling") or "").strip()
+            if mood:
+                bits.append(f"Mood: {mood}")
+            if biggest_stress:
+                bits.append(f"Biggest stress: {biggest_stress}")
+            if reflection_frequency:
+                bits.append(f"Reflection frequency: {reflection_frequency}")
+            if more_of:
+                bits.append(f"Wants more of: {more_of}")
+            if future_feeling:
+                bits.append(f"Wants future self to feel: {future_feeling}")
+            if one_year:
+                bits.append(f"1-year vision: {one_year}")
+            if five_year:
+                bits.append(f"5-year vision: {five_year}")
+        if bits:
+            profile_ctx = " | ".join(bits)
+
     # Pull recent journal entries to provide real background context.
     # Keep this bounded so we don't blow token limits.
     recent = (
@@ -229,6 +338,7 @@ async def future_self_reflection(payload: dict, db: Session = Depends(get_db)):
         journal_summary=journal_summary,
         pattern=pattern,
         journal_background=journal_background,
+        profile_context=profile_ctx,
         roast_mode=roast_mode,
         reality_check=reality_check,
     )

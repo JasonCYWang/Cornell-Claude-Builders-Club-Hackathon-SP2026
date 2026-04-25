@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
 import {
   FutureSelfQuestionnaire,
   getStoredQuestionnaire,
@@ -77,7 +78,13 @@ export function Dashboard() {
         </div>
 
         {!questionnaire ? (
-          <FutureSelfQuestionnaire onComplete={(answers) => setQuestionnaire(answers)} />
+          <FutureSelfQuestionnaire
+            onComplete={(answers) => {
+              setQuestionnaire(answers)
+              // Persist the full questionnaire so backend prompt can use it.
+              void api.saveProfile(answers as unknown as Record<string, unknown>)
+            }}
+          />
         ) : (
           <GlassCard className="p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">

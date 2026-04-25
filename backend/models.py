@@ -8,6 +8,18 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
+class UserProfile(Base):
+    __tablename__ = "user_profile"
+
+    # Single-row table (id="me") for local hackathon app.
+    id = Column(String, primary_key=True, default="me")
+    first_name = Column(String, nullable=True)
+    life_stage = Column(String, nullable=True)
+    focus = Column(Text, nullable=True)  # JSON array string or free text
+    # Full questionnaire payload (JSON) from the Dashboard onboarding flow.
+    questionnaire_json = Column(Text, nullable=True)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow)
+
 
 class JournalEntry(Base):
     __tablename__ = "journal_entries"
