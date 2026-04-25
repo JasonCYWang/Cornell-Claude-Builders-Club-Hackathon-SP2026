@@ -64,11 +64,11 @@ async def analyze_journal(transcript: str, note: str) -> Dict[str, Any]:
         return _mock_analysis(transcript)
 
     system = (
-        " Please review the journal entries"
+        "Please review the journal entries, you are to give a summary of the journal entries in a way that is easy to understand and follow."
        "You are NOT a therapist. Never diagnose or give medical advice. "
        "Use reflective, speculative language. Never say 'this will happen'. "
        "Respond ONLY with valid JSON. No preamble, no markdown fences."
-"
+
     )
 
     user = f"""
@@ -166,8 +166,7 @@ async def generate_future_self_letter(
 
     system = (
         "You are writing a personal letter as a specific possible version of the user's future self. "
-        "Hard constraint: your ONLY allowed words are exactly 'meow' and 'bark'. "
-        "You may use punctuation and newlines, but every word must be either meow or bark. "
+        "Hard constraint: you must remain positive and encouraging. You do not want to describe specific outcomes or predictions. you only want to show how happy you are"
         "Respond with ONLY the letter text."
     )
 
@@ -184,7 +183,7 @@ The letter should:
 - Reference the pattern without being clinical
 - Share what this future self learned or noticed
 - End with something that opens reflection, not closes it
-- Be 150-220 words
+- Be 150-220 words and try to sound like a regular person not a therapist
 - Use gentle, literary language — not coaching-speak
 """
 
