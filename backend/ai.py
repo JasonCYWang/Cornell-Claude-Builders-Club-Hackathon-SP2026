@@ -37,13 +37,42 @@ MOOD_COLORS = {
 }
 
 FUTURE_SELF_PERSONAS = {
-    "ceo": "CEO Fighter — strategic, decisive, and allergic to excuses.",
-    "brutal": "Brutally Honest Fighter — sharp, witty, and painfully clear.",
-    "zen": "Zen Fighter — grounded, spacious, and wise under pressure.",
-    "villain": "Villain Arc Fighter — unapologetic boundaries, high standards, no fluff.",
-    "main-character": "Main Character Fighter — cinematic, bold, and emotionally tuned in.",
-    "risk-taker": "Risk-Taker Fighter — acts before fear fully disappears.",
-    "soft-life": "Soft Life Fighter — sustainable joy, clean boundaries, and calm wins.",
+    # Frontend persona ids (see `frontend/src/pages/FutureSelves.tsx`)
+    # Keep this list aligned with the frontend, and in the same order.
+    "ceo": "CEO Version of You — strategic, decisive, and allergic to excuses.",
+    "brutal": "Brutally Honest You — sharp, witty, and painfully clear.",
+    "zen": "Calm Zen You — grounded, spacious, and wise under pressure.",
+    "villain": "Villain Arc You — unapologetic boundaries, high standards, no fluff.",
+    "main-character": "Main Character You — cinematic, bold, and emotionally tuned in.",
+    "delusional-confidence": "Delusional Confidence You — ridiculous belief with chaotic momentum.",
+}
+
+FUTURE_SELF_PROMPT_GUIDANCE: dict[str, str] = {
+    # Keep this list aligned with the frontend, and in the same order.
+    "ceo": (
+        "Be crisp, strategic, and concrete. Translate feelings into decisions, constraints, trade-offs, and a next move. "
+        "No fluff; still humane."
+    ),
+    "brutal": (
+        "Be blunt and funny without cruelty. Call out self-deception, euphemisms, and avoidance. "
+        "One memorable line that lands like a mirror."
+    ),
+    "zen": (
+        "Be slow, grounded, and spacious. Use simple sensory language, gentle reframes, and quiet permission. "
+        "No hustle language."
+    ),
+    "villain": (
+        "Be unapologetic about boundaries and standards. Cut through nonsense. "
+        "Make it feel powerful, not mean. High self-respect."
+    ),
+    "main-character": (
+        "Be cinematic and emotionally tuned. Give the moment a story arc. "
+        "Use vivid imagery, but keep it true to the user's context."
+    ),
+    "delusional-confidence": (
+        "Be wildly confident and chaotic in a fun way. Big energy, bold framing, a little ridiculous—but still helpful. "
+        "Do not become incoherent."
+    ),
 }
 
 APPROVAL_BADGES = [
@@ -168,6 +197,7 @@ async def generate_future_self_letter(
     question: str,
     journal_summary: str,
     pattern: str,
+    journal_background: str = "",
     *,
     roast_mode: bool = False,
     reality_check: bool = False,
@@ -175,6 +205,7 @@ async def generate_future_self_letter(
     if not _gemini_key():
         return _fallback_letter(roast_mode=roast_mode or reality_check)
     persona = FUTURE_SELF_PERSONAS.get(future_self_type, "A vivid future version of you")
+    persona_guidance = FUTURE_SELF_PROMPT_GUIDANCE.get(future_self_type, "")
     tone = (
         "Be witty, sharp, and playful without cruelty."
         if roast_mode
@@ -185,9 +216,9 @@ async def generate_future_self_letter(
     prompt = f"""
 Write a letter from this persona: {persona}
 Tone: {tone}
+Persona style notes: {persona_guidance or "Stay consistent with the persona description above."}
 Rules:
-- First person voice from future self.
-- Speculative language only: use might/could/looking back.
+- First person voice from future self. try to embody and take the speach of the persona
 - Never use diagnose.
 - 140-220 words.
 - No chat format, no bullets.
@@ -195,6 +226,8 @@ Rules:
 Context:
 - Pattern: {pattern}
 - Summary: {journal_summary}
+- Journal background (recent entries, oldest→newest):
+{journal_background or "[no additional entries provided]"}
 - User question: {question}
 """
     try:
