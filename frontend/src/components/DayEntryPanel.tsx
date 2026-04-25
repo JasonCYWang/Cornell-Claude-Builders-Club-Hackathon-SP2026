@@ -26,7 +26,7 @@ export function DayEntryPanel({ dateKey, entries, onClose, onRevisit }: DayEntry
         'overflow-hidden transition-[max-height,opacity] duration-300 ease-out',
         isOpen ? 'opacity-100' : 'opacity-0',
       ].join(' ')}
-      style={{ maxHeight: isOpen ? 520 : 0 }}
+      style={{ maxHeight: isOpen ? 1000 : 0 }}
     >
       <div className="mt-3">
         <GlassCard className="relative px-4 py-4">
@@ -39,8 +39,8 @@ export function DayEntryPanel({ dateKey, entries, onClose, onRevisit }: DayEntry
             ×
           </button>
 
-          <div className="pr-8">
-            <div className="font-display text-[18px] text-textDark">
+          <div className="pr-12">
+            <div className="font-display text-[17px] leading-tight text-textDark md:text-[18px]">
               {dateKey ? formatLong(dateKey) : ''}
             </div>
             <div className="mt-0.5 text-[12px] text-textSoft">

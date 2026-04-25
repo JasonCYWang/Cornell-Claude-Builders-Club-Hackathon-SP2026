@@ -129,20 +129,21 @@ export function MoodCalendar({ summaryMap, selectedDay, onDaySelect }: MoodCalen
           const hasEntries = Boolean(summary?.count)
           const selected = selectedDay === dateKey
           const isToday = todayKey === dateKey
+          const isPastOrToday = dateKey <= todayKey
 
           return (
             <button
               key={dateKey}
               type="button"
-              onClick={() => hasEntries && onDaySelect(dateKey)}
+              onClick={() => isPastOrToday && onDaySelect(dateKey)}
               className={[
                 'relative h-[36px] w-[36px] rounded-full transition-colors duration-150',
-                hasEntries ? 'cursor-pointer' : 'cursor-default',
+                isPastOrToday ? 'cursor-pointer' : 'cursor-default',
                 selected
                   ? 'border border-lavenderDeep bg-glassBg'
                   : 'border border-transparent hover:bg-[rgba(200,192,216,0.15)]',
               ].join(' ')}
-              style={{ pointerEvents: hasEntries ? 'auto' : 'none' }}
+              style={{ pointerEvents: isPastOrToday ? 'auto' : 'none' }}
               aria-label={`Day ${day}`}
             >
               <div className="absolute left-1/2 top-[6px] -translate-x-1/2 font-sans text-[13px] text-textMid">
