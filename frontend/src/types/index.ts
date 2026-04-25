@@ -41,7 +41,8 @@ export type FutureSelfType =
   | 'zen'
   | 'villain'
   | 'main-character'
-  | 'delusional-confidence'
+  | 'risk-taker'
+  | 'soft-life'
 
 export type FutureSelfMeta = {
   id: FutureSelfType
@@ -49,6 +50,9 @@ export type FutureSelfMeta = {
   subtitle: string
   emoji: string
   gradientClass: string
+  strength?: string
+  weakness?: string
+  specialMove?: string
 }
 
 export type ReflectionResponse = {

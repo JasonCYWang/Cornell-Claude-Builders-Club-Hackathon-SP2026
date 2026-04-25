@@ -18,45 +18,73 @@ import type {
 const FUTURE_SELVES: FutureSelfMeta[] = [
   {
     id: 'ceo',
-    name: 'CEO Version of You',
+    name: 'CEO Fighter',
     subtitle: 'Strategic, decisive, and allergic to avoidable drama.',
     emoji: '📈',
     gradientClass: 'bg-gradient-to-br from-[rgba(184,205,216,0.55)] to-[rgba(184,205,184,0.25)]',
+    strength: 'Discipline',
+    weakness: 'Rigidity',
+    specialMove: 'Executes before overthinking starts',
   },
   {
     id: 'brutal',
-    name: 'Brutally Honest You',
+    name: 'Brutally Honest Fighter',
     subtitle: 'Sharp clarity, zero fluff, and meme-level honesty.',
     emoji: '🗡️',
     gradientClass: 'bg-gradient-to-br from-[rgba(200,192,216,0.55)] to-[rgba(253,249,245,0.0)]',
+    strength: 'Clarity',
+    weakness: 'Can come in hot',
+    specialMove: 'Names the truth in one sentence',
   },
   {
     id: 'zen',
-    name: 'Soft Life You',
+    name: 'Zen Fighter',
     subtitle: 'Low chaos, high peace, still winning.',
     emoji: '🌸',
     gradientClass: 'bg-gradient-to-br from-[rgba(184,205,184,0.55)] to-[rgba(253,249,245,0.0)]',
+    strength: 'Calm',
+    weakness: 'Slow starts',
+    specialMove: 'Stabilizes the nervous system mid-crisis',
+  },
+  {
+    id: 'soft-life',
+    name: 'Soft Life Fighter',
+    subtitle: 'Protects peace without shrinking ambition.',
+    emoji: '🪷',
+    gradientClass: 'bg-gradient-to-br from-[rgba(255,126,217,0.35)] to-[rgba(184,205,184,0.3)]',
+    strength: 'Boundaries',
+    weakness: 'Avoiding discomfort',
+    specialMove: 'Wins quietly and sustainably',
   },
   {
     id: 'villain',
-    name: 'Villain Arc You',
+    name: 'Villain Arc Fighter',
     subtitle: 'Boundaries, standards, and glorious focus.',
     emoji: '🖤',
     gradientClass: 'bg-gradient-to-br from-[rgba(212,184,184,0.55)] to-[rgba(200,192,216,0.25)]',
+    strength: 'Standards',
+    weakness: 'Impatience',
+    specialMove: 'Cuts fake obligations instantly',
   },
   {
     id: 'main-character',
-    name: 'Main Character You',
+    name: 'Main Character Fighter',
     subtitle: 'Cinematic momentum with emotional depth.',
     emoji: '🎬',
     gradientClass: 'bg-gradient-to-br from-[rgba(212,200,184,0.55)] to-[rgba(184,205,216,0.2)]',
+    strength: 'Courage',
+    weakness: 'Can romanticize chaos',
+    specialMove: 'Turns fear into plot momentum',
   },
   {
-    id: 'delusional-confidence',
-    name: 'Delusional Confidence You',
-    subtitle: 'Wild belief, big energy, suspiciously effective.',
-    emoji: '⚡',
-    gradientClass: 'bg-gradient-to-br from-[rgba(212,184,200,0.55)] to-[rgba(253,249,245,0.0)]',
+    id: 'risk-taker',
+    name: 'Risk-Taker Fighter',
+    subtitle: 'Acts before fear disappears.',
+    emoji: '🚀',
+    gradientClass: 'bg-gradient-to-br from-[rgba(255,177,102,0.5)] to-[rgba(255,126,217,0.2)]',
+    strength: 'Action bias',
+    weakness: 'Overcommitting',
+    specialMove: 'Launches the first move immediately',
   },
 ]
 
@@ -162,7 +190,7 @@ export function FutureSelves() {
         <GlassCard className="p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="font-display text-[26px] italic text-textDark">Your current thread ⚡</div>
+              <div className="font-display text-[26px] text-textDark">Fighter Builder ⚡</div>
               <div className="mt-1 text-[12px] text-textSoft">Your emotional time machine is online.</div>
             </div>
             <MoodBadge mood={activeEntry.mood} label={activeEntry.moodLabel} size="md" />
@@ -309,6 +337,17 @@ export function FutureSelves() {
                 className="rounded-full border border-glassBorder bg-[rgba(86,186,255,0.22)] px-3 py-1.5 text-[12px] text-textDark hover:bg-[rgba(86,186,255,0.32)]"
               >
                 Give me main character advice
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelected('risk-taker')
+                  setQuestion('What action should I take before I feel ready?')
+                  void generate()
+                }}
+                className="rounded-full border border-glassBorder bg-[rgba(255,177,102,0.25)] px-3 py-1.5 text-[12px] text-textDark hover:bg-[rgba(255,177,102,0.35)]"
+              >
+                Risk-taker advice
               </button>
             </div>
 

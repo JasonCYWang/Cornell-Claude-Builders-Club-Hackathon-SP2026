@@ -26,51 +26,79 @@ export function Dashboard() {
 
   return (
     <div className="fm-page space-y-5">
+      <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(123,91,255,0.22),rgba(255,126,217,0.2),rgba(86,186,255,0.18))]">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="font-display text-[30px] text-textDark">HOME BASE</div>
+            <div className="mt-1 text-[13px] text-textMid">
+              Elaine, Level 7 Future Fighter
+            </div>
+          </div>
+          <div className="fm-sticker px-4 py-2 text-[11px] font-pixel text-textDark">NEW FIGHTER INSIGHT</div>
+        </div>
+        <div className="mt-4">
+          <div className="mb-1 flex items-center justify-between text-[12px] text-textMid">
+            <span>Self-Trust XP</span>
+            <span>742 / 1000</span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-[rgba(255,255,255,0.45)]">
+            <div className="h-full w-[74%] bg-[linear-gradient(90deg,#7B5BFF,#FF7ED9,#56BAFF)]" />
+          </div>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['Courage', '78'],
+            ['Discipline', '64'],
+            ['Clarity', '71'],
+            ['Confidence', '69'],
+          ].map(([stat, score]) => (
+            <div key={stat} className="rounded-glass border border-white/50 bg-[rgba(253,249,245,0.74)] px-3 py-3">
+              <div className="text-[11px] uppercase tracking-[0.12em] text-textSoft">{stat}</div>
+              <div className="mt-1 font-display text-[24px] text-textDark">{score}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-glass border border-white/50 bg-[rgba(255,255,255,0.45)] px-4 py-3">
+          <div className="text-[11px] font-pixel text-textSoft">ACTIVE QUEST</div>
+          <div className="mt-1 text-[14px] text-textDark">Stop waiting for certainty before acting.</div>
+        </div>
+      </GlassCard>
+
       <div className="grid gap-5 md:grid-cols-2">
         <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(255,126,217,0.24),rgba(86,186,255,0.18),rgba(255,177,102,0.2))]">
-          <div className="font-display text-[28px] italic text-textDark">Today’s Mirror Moment ✨</div>
+          <div className="font-display text-[26px] text-textDark">Today’s Mirror Moment ✨</div>
           <div className="mt-2 text-[13px] leading-relaxed text-textMid">{todayCopy}</div>
 
           {latest ? (
             <div className="mt-5 space-y-3">
               <MoodBadge mood={latest.mood} label={latest.moodLabel} size="lg" />
-              <div className="font-display text-[17px] italic leading-relaxed text-textDark">
-                {latest.summary}
-              </div>
+              <div className="text-[15px] leading-relaxed text-textDark">{latest.summary}</div>
               <PatternBanner text={latest.patternDetected} />
             </div>
           ) : (
             <div className="mt-5 text-[13px] text-textSoft">
-              Go to <span className="text-textMid">Journal</span> to record your first reflection.
+              Open <span className="text-textMid">Train</span> to start your first session.
             </div>
           )}
         </GlassCard>
 
         <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(123,91,255,0.2),rgba(255,126,217,0.2),rgba(86,186,255,0.16))]">
-          <div className="font-display text-[28px] italic text-textDark">Pattern Callout 👀</div>
+          <div className="font-display text-[26px] text-textDark">Pattern Callout 👀</div>
           <div className="mt-2 text-[13px] leading-relaxed text-textMid">
-            Emotional time travel, but make it iconic. Patterns, plot twists, and future-self energy.
+            Emotional decision simulator mode is active.
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3 text-[12px] text-textSoft">
-            <div className="fm-sticker px-4 py-3 text-textDark">
-              Record → Transcribe
-            </div>
-            <div className="fm-sticker px-4 py-3 text-textDark">
-              Mood → Themes
-            </div>
-            <div className="fm-sticker px-4 py-3 text-textDark">
-              Pattern → Question
-            </div>
-            <div className="fm-sticker px-4 py-3 text-textDark">
-              Messages from alternate timelines
-            </div>
+          <div className="mt-5 grid grid-cols-2 gap-3 text-[12px]">
+            <div className="fm-sticker px-4 py-3 text-textDark">Quest Complete</div>
+            <div className="fm-sticker px-4 py-3 text-textDark">Pattern Unlocked</div>
+            <div className="fm-sticker px-4 py-3 text-textDark">Future Cringe Avoided</div>
+            <div className="fm-sticker px-4 py-3 text-textDark">Reality Check Available</div>
           </div>
         </GlassCard>
       </div>
 
       <div className="space-y-3">
         <div className="px-1">
-          <div className="font-display text-[28px] italic text-textDark">Pick Your Future Fighter 🎮</div>
+          <div className="font-display text-[28px] text-textDark">Pick Your Future Fighter 🎮</div>
           <div className="mt-1 text-[12px] text-textSoft">
             This questionnaire (from your `questionaire` flow) creates personalized future directions.
           </div>

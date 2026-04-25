@@ -24,7 +24,7 @@ body {
 }
 
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   color: var(--text-dark);
   background:
     radial-gradient(circle at 12% 18%, rgba(255, 126, 217, 0.14), transparent 28%),

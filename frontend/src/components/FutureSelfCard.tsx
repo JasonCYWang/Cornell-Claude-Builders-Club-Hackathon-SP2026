@@ -32,6 +32,13 @@ export function FutureSelfCard({
           <div className="text-[24px]">{meta.emoji}</div>
         </div>
         <div className={['mt-4 h-[54px] w-full rounded-glass border border-white/40', meta.gradientClass].join(' ')} />
+        {meta.strength || meta.weakness || meta.specialMove ? (
+          <div className="mt-3 space-y-1 text-[11px] text-textDark">
+            {meta.strength ? <div><span className="text-textSoft">Strength:</span> {meta.strength}</div> : null}
+            {meta.weakness ? <div><span className="text-textSoft">Weakness:</span> {meta.weakness}</div> : null}
+            {meta.specialMove ? <div><span className="text-textSoft">Special Move:</span> {meta.specialMove}</div> : null}
+          </div>
+        ) : null}
         {selected ? <div className="mt-2 text-[11px] font-medium text-textDark">Selected fighter ⚔️</div> : null}
       </GlassCard>
     </button>

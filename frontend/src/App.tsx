@@ -24,7 +24,7 @@ export default function App() {
         </Routes>
 
         <div className="mt-10 text-center text-[12px] text-textSoft">
-          FutureMirror is a reflection tool, not therapy.
+          Future Fighter — Build the version of you who wins.
         </div>
       </main>
     </div>

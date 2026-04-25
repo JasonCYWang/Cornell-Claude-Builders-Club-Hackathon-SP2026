@@ -81,8 +81,8 @@ export function VoiceJournal() {
         <div className="space-y-4">
           <GlassCard className={['p-5', showSparkle ? 'fm-sparkle' : ''].join(' ')}>
             <div className="flex flex-col items-center">
-              <div className="mb-2 text-[12px] font-medium uppercase tracking-[0.16em] text-[#7B5BFF]">
-                Voice Portal
+              <div className="mb-2 font-display text-[28px] text-textDark">
+                Training Session
               </div>
               <MicButton isRecording={recorder.isRecording} onClick={onMicClick} />
               <div className="mt-4">
@@ -149,10 +149,12 @@ export function VoiceJournal() {
                 disabled={saving || (!recorder.audioBlob && !journalText.trim())}
                 className="fm-glow-button mt-4 w-full rounded-full bg-[linear-gradient(135deg,rgba(123,91,255,0.9),rgba(255,126,217,0.88),rgba(86,186,255,0.88))] px-5 py-3 text-[13px] font-semibold text-white hover:brightness-105 disabled:opacity-50"
               >
-                {saving ? 'Reflecting…' : 'Save & Reflect'}
+                {saving ? 'Training…' : 'Start Training'}
               </button>
               {lastEntry && !saving ? (
-                <div className="mt-3 text-[12px] text-[#7B5BFF]">Voice memo captured. Future you is typing…</div>
+                <div className="mt-3 text-center text-[12px] text-[#7B5BFF]">
+                  Training Complete. Future fighter is typing…
+                </div>
               ) : null}
 
               {error ? <div className="mt-3 text-[12px] text-roseDeep">{error}</div> : null}
@@ -160,10 +162,15 @@ export function VoiceJournal() {
           </GlassCard>
 
           {lastEntry ? (
-            <GlassCard className="p-5">
+            <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(103,214,181,0.2),rgba(86,186,255,0.18),rgba(255,177,102,0.18))]">
               <div className="flex items-center justify-between gap-3">
-                <div className="font-display text-[20px] italic text-textDark">Mood result</div>
+                <div className="font-display text-[22px] text-textDark">Training Reward</div>
                 <MoodBadge mood={lastEntry.mood} label={lastEntry.moodLabel} size="md" />
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2 text-[12px]">
+                <span className="fm-sticker px-3 py-1 text-textDark">+25 Clarity XP</span>
+                <span className="fm-sticker px-3 py-1 text-textDark">+15 Courage XP</span>
+                <span className="fm-sticker px-3 py-1 text-textDark">Pattern Unlocked</span>
               </div>
               <div className="mt-3 font-display text-[18px] italic leading-relaxed text-textDark">
                 {lastEntry.summary}

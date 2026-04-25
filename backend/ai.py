@@ -37,12 +37,13 @@ MOOD_COLORS = {
 }
 
 FUTURE_SELF_PERSONAS = {
-    "ceo": "CEO Version of You — strategic, decisive, and allergic to excuses.",
-    "brutal": "Brutally Honest You — sharp, witty, and painfully clear.",
-    "zen": "Calm Zen You — grounded, spacious, and wise under pressure.",
-    "villain": "Villain Arc You — unapologetic boundaries, high standards, no fluff.",
-    "main-character": "Main Character You — cinematic, bold, and emotionally tuned in.",
-    "delusional-confidence": "Delusional Confidence You — ridiculous belief with chaotic momentum.",
+    "ceo": "CEO Fighter — strategic, decisive, and allergic to excuses.",
+    "brutal": "Brutally Honest Fighter — sharp, witty, and painfully clear.",
+    "zen": "Zen Fighter — grounded, spacious, and wise under pressure.",
+    "villain": "Villain Arc Fighter — unapologetic boundaries, high standards, no fluff.",
+    "main-character": "Main Character Fighter — cinematic, bold, and emotionally tuned in.",
+    "risk-taker": "Risk-Taker Fighter — acts before fear fully disappears.",
+    "soft-life": "Soft Life Fighter — sustainable joy, clean boundaries, and calm wins.",
 }
 
 APPROVAL_BADGES = [
