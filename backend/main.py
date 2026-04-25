@@ -10,7 +10,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ai import analyze_journal, generate_future_self_letter
+from ai import (
+    analyze_journal,
+    detect_delusion,
+    evaluate_future_approval,
+    generate_future_self_letter,
+)
 from database import engine, get_db
 from models import Base, JournalEntry
 from transcribe import transcribe_audio
@@ -193,6 +198,8 @@ async def future_self_reflection(payload: dict):
     future_self_type = (payload.get("futureSelfType") or "").strip()
     journal_summary = (payload.get("journalSummary") or "").strip()
     pattern = (payload.get("patternDetected") or "").strip()
+    roast_mode = bool(payload.get("roastMode"))
+    reality_check = bool(payload.get("realityCheck"))
 
     # If Gemini isn't configured (or errors), `generate_future_self_letter` returns
     # a built-in fallback letter. We also return `source` so the frontend can tell.
@@ -201,6 +208,8 @@ async def future_self_reflection(payload: dict):
         question=question,
         journal_summary=journal_summary,
         pattern=pattern,
+        roast_mode=roast_mode,
+        reality_check=reality_check,
     )
     is_fallback = letter.startswith("There’s a quiet loop in what you wrote")
     return {
@@ -208,4 +217,23 @@ async def future_self_reflection(payload: dict):
         "futureSelfType": future_self_type,
         "source": "fallback" if is_fallback else "gemini",
     }
+
+
+@app.post("/future-self/approve")
+async def future_self_approve(payload: dict):
+    question = (payload.get("question") or "").strip()
+    context = (payload.get("context") or "").strip()
+    if not question:
+        raise HTTPException(status_code=400, detail="question is required")
+    result = await evaluate_future_approval(question, context)
+    return result
+
+
+@app.post("/future-self/delusion")
+async def future_self_delusion(payload: dict):
+    statement = (payload.get("statement") or "").strip()
+    if not statement:
+        raise HTTPException(status_code=400, detail="statement is required")
+    result = await detect_delusion(statement)
+    return result
 

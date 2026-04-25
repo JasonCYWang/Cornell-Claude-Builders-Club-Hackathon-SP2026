@@ -27,8 +27,16 @@ export function Waveform({
       {bars.map((h, i) => (
         <div
           key={i}
-          className="w-[6px] rounded-full bg-[rgba(155,143,176,0.55)] transition-[height] duration-150"
-          style={{ height: `${Math.round(h * 40)}px` }}
+          className="w-[6px] rounded-full transition-[height] duration-150"
+          style={{
+            height: `${Math.round(h * 40)}px`,
+            background:
+              i % 3 === 0
+                ? 'linear-gradient(180deg, #7B5BFF, #B15BFF)'
+                : i % 3 === 1
+                  ? 'linear-gradient(180deg, #56BAFF, #7FE6FF)'
+                  : 'linear-gradient(180deg, #FF7ED9, #FFB166)',
+          }}
         />
       ))}
     </div>

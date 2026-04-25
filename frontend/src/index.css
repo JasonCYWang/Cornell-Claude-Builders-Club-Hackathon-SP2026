@@ -26,7 +26,11 @@ body {
 body {
   font-family: "DM Sans", sans-serif;
   color: var(--text-dark);
-  background: var(--ivory);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 126, 217, 0.14), transparent 28%),
+    radial-gradient(circle at 84% 20%, rgba(86, 186, 255, 0.2), transparent 32%),
+    radial-gradient(circle at 65% 82%, rgba(255, 177, 102, 0.16), transparent 30%),
+    var(--ivory);
 }
 
 /* Background orbs */
@@ -42,17 +46,17 @@ body {
   z-index: 0;
 }
 .fm-orb--lavender {
-  background: radial-gradient(circle at 30% 30%, rgba(200, 192, 216, 0.95), rgba(200, 192, 216, 0));
+  background: radial-gradient(circle at 30% 30%, rgba(177, 119, 255, 0.92), rgba(177, 119, 255, 0));
   top: -140px;
   left: -120px;
 }
 .fm-orb--mist {
-  background: radial-gradient(circle at 30% 30%, rgba(184, 205, 216, 0.95), rgba(184, 205, 216, 0));
+  background: radial-gradient(circle at 30% 30%, rgba(86, 186, 255, 0.92), rgba(86, 186, 255, 0));
   top: 30%;
   right: -160px;
 }
 .fm-orb--rose {
-  background: radial-gradient(circle at 30% 30%, rgba(212, 184, 184, 0.95), rgba(212, 184, 184, 0));
+  background: radial-gradient(circle at 30% 30%, rgba(255, 126, 217, 0.92), rgba(255, 126, 217, 0));
   bottom: -180px;
   left: 25%;
 }
@@ -88,6 +92,54 @@ body {
   100% {
     transform: scale(1);
     opacity: 0.75;
+  }
+}
+
+.fm-glow-button {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+    0 10px 28px rgba(177, 119, 255, 0.35),
+    0 4px 18px rgba(86, 186, 255, 0.28);
+}
+
+.fm-sticker {
+  border-radius: 999px;
+  border: 1px solid rgba(177, 119, 255, 0.35);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.44));
+  box-shadow: 0 8px 22px rgba(177, 119, 255, 0.2);
+}
+
+.fm-sparkle {
+  position: relative;
+}
+.fm-sparkle::before,
+.fm-sparkle::after {
+  content: "✦";
+  position: absolute;
+  color: rgba(177, 119, 255, 0.9);
+  font-size: 18px;
+  animation: fm-sparkle-pop 850ms ease-out forwards;
+}
+.fm-sparkle::before {
+  left: 12%;
+  top: -6px;
+}
+.fm-sparkle::after {
+  right: 10%;
+  top: 4px;
+  animation-delay: 70ms;
+}
+@keyframes fm-sparkle-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(1.15);
   }
 }
 

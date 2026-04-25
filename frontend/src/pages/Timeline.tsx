@@ -4,6 +4,15 @@ import { MoodBadge } from '../components/MoodBadge'
 import { PatternBanner } from '../components/PatternBanner'
 import { useJournalEntries } from '../hooks/useJournalEntries'
 
+const TAG_COLORS: Record<string, string> = {
+  anxiety: 'rgba(177,119,255,0.22)',
+  ambition: 'rgba(255,177,102,0.28)',
+  procrastination: 'rgba(255,126,217,0.24)',
+  confidence: 'rgba(86,186,255,0.25)',
+  chaos: 'rgba(255,126,160,0.25)',
+  clarity: 'rgba(103,214,181,0.26)',
+}
+
 export function Timeline() {
   const nav = useNavigate()
   const { entries, loading } = useJournalEntries()
@@ -11,8 +20,8 @@ export function Timeline() {
   return (
     <div className="fm-page">
       <div className="mb-4">
-        <div className="font-display text-[22px] italic text-textDark">Timeline</div>
-        <div className="mt-1 text-[12px] text-textSoft">A gentle list of what you’ve noticed over time.</div>
+        <div className="font-display text-[28px] italic text-textDark">Memory Vault Timeline 🧿</div>
+        <div className="mt-1 text-[12px] text-textSoft">Collectible moments from your emotional multiverse.</div>
       </div>
 
       {loading ? <div className="text-[12px] text-textSoft">Loading…</div> : null}
@@ -69,7 +78,10 @@ export function Timeline() {
                 {e.emotionalThemes.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-3 py-1 text-[12px] text-textMid"
+                    className="rounded-full border border-glassBorder px-3 py-1 text-[12px] text-textDark"
+                    style={{
+                      background: TAG_COLORS[t.toLowerCase()] || 'rgba(253,249,245,0.62)',
+                    }}
                   >
                     {t}
                   </span>

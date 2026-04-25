@@ -1,4 +1,10 @@
-import type { CalendarSummaryMap, JournalEntry, ReflectionResponse } from '../types'
+import type {
+  ApprovalResponse,
+  CalendarSummaryMap,
+  DelusionResponse,
+  JournalEntry,
+  ReflectionResponse,
+} from '../types'
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -56,6 +62,8 @@ export const api = {
     futureSelfType: string
     journalSummary: string
     patternDetected: string
+    roastMode?: boolean
+    realityCheck?: boolean
   }): Promise<ReflectionResponse> => {
     const res = await fetch(`${BASE}/future-self/reflection`, {
       method: 'POST',
@@ -64,6 +72,26 @@ export const api = {
     })
     if (!res.ok) throw new Error('Reflection failed')
     return (await res.json()) as ReflectionResponse
+  },
+
+  getFutureApproval: async (payload: { question: string; context?: string }): Promise<ApprovalResponse> => {
+    const res = await fetch(`${BASE}/future-self/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error('Approval check failed')
+    return (await res.json()) as ApprovalResponse
+  },
+
+  getDelusionCheck: async (payload: { statement: string }): Promise<DelusionResponse> => {
+    const res = await fetch(`${BASE}/future-self/delusion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error('Delusion detector failed')
+    return (await res.json()) as DelusionResponse
   },
 }
 

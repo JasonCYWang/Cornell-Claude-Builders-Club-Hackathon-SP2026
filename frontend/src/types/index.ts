@@ -35,7 +35,13 @@ export type CalendarDaySummary = {
 }
 export type CalendarSummaryMap = Record<string, CalendarDaySummary>
 
-export type FutureSelfType = 'risk' | 'safe' | 'burnt' | 'fulfilled' | 'regret' | 'confident'
+export type FutureSelfType =
+  | 'ceo'
+  | 'brutal'
+  | 'zen'
+  | 'villain'
+  | 'main-character'
+  | 'delusional-confidence'
 
 export type FutureSelfMeta = {
   id: FutureSelfType
@@ -49,5 +55,15 @@ export type ReflectionResponse = {
   letter: string
   futureSelfType: FutureSelfType
   source?: 'gemini' | 'fallback'
+}
+
+export type ApprovalResponse = {
+  badge: 'Approved' | 'Character Development' | 'Deeply Concerning' | 'Villain Origin Story' | 'Future Cringe Detected'
+  reason: string
+}
+
+export type DelusionResponse = {
+  severity: 'Low' | 'Medium' | 'High' | 'Extreme'
+  message: string
 }
 

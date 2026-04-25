@@ -20,7 +20,7 @@ export default {
         glassBorder: 'var(--glass-border)',
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'serif'],
+        display: ['"Fraunces"', 'serif'],
         sans: ['"DM Sans"', 'sans-serif'],
       },
       borderRadius: {

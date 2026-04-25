@@ -23,6 +23,7 @@ export function VoiceJournal() {
   const [lastEntry, setLastEntry] = useState<JournalEntry | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showSparkle, setShowSparkle] = useState(false)
 
   const dayEntries = useMemo(() => {
     if (!selectedDay) return []
@@ -64,6 +65,8 @@ export function VoiceJournal() {
       recorder.reset()
       setNote('')
       setJournalText('')
+      setShowSparkle(true)
+      window.setTimeout(() => setShowSparkle(false), 1000)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Upload failed.')
     } finally {
@@ -76,8 +79,11 @@ export function VoiceJournal() {
       <div className="grid gap-5 md:grid-cols-2">
         {/* LEFT: Recorder */}
         <div className="space-y-4">
-          <GlassCard className="p-5">
+          <GlassCard className={['p-5', showSparkle ? 'fm-sparkle' : ''].join(' ')}>
             <div className="flex flex-col items-center">
+              <div className="mb-2 text-[12px] font-medium uppercase tracking-[0.16em] text-[#7B5BFF]">
+                Voice Portal
+              </div>
               <MicButton isRecording={recorder.isRecording} onClick={onMicClick} />
               <div className="mt-4">
                 <Waveform active={recorder.isRecording && !recorder.isPaused} />
@@ -92,7 +98,7 @@ export function VoiceJournal() {
                   type="button"
                   onClick={recorder.isPaused ? recorder.resume : recorder.pause}
                   disabled={!recorder.isRecording}
-                  className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-4 py-2 text-[13px] text-textMid hover:bg-[rgba(200,192,216,0.12)] disabled:opacity-50"
+                  className="rounded-full border border-glassBorder bg-[rgba(86,186,255,0.18)] px-4 py-2 text-[13px] text-textDark hover:bg-[rgba(86,186,255,0.3)] disabled:opacity-50"
                 >
                   {recorder.isPaused ? 'Resume' : 'Pause'}
                 </button>
@@ -100,14 +106,14 @@ export function VoiceJournal() {
                   type="button"
                   onClick={recorder.stop}
                   disabled={!recorder.isRecording}
-                  className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-4 py-2 text-[13px] text-textMid hover:bg-[rgba(200,192,216,0.12)] disabled:opacity-50"
+                  className="rounded-full border border-glassBorder bg-[rgba(255,126,217,0.18)] px-4 py-2 text-[13px] text-textDark hover:bg-[rgba(255,126,217,0.3)] disabled:opacity-50"
                 >
                   Stop
                 </button>
                 <button
                   type="button"
                   onClick={recorder.reset}
-                  className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-4 py-2 text-[13px] text-textMid hover:bg-[rgba(200,192,216,0.12)]"
+                  className="rounded-full border border-glassBorder bg-[rgba(255,177,102,0.2)] px-4 py-2 text-[13px] text-textDark hover:bg-[rgba(255,177,102,0.34)]"
                 >
                   Reset
                 </button>
@@ -141,10 +147,13 @@ export function VoiceJournal() {
                 type="button"
                 onClick={onSaveReflect}
                 disabled={saving || (!recorder.audioBlob && !journalText.trim())}
-                className="mt-4 w-full rounded-full bg-[rgba(200,192,216,0.28)] px-5 py-3 text-[13px] font-medium text-textDark hover:bg-[rgba(200,192,216,0.36)] disabled:opacity-50"
+                className="fm-glow-button mt-4 w-full rounded-full bg-[linear-gradient(135deg,rgba(123,91,255,0.9),rgba(255,126,217,0.88),rgba(86,186,255,0.88))] px-5 py-3 text-[13px] font-semibold text-white hover:brightness-105 disabled:opacity-50"
               >
                 {saving ? 'Reflecting…' : 'Save & Reflect'}
               </button>
+              {lastEntry && !saving ? (
+                <div className="mt-3 text-[12px] text-[#7B5BFF]">Voice memo captured. Future you is typing…</div>
+              ) : null}
 
               {error ? <div className="mt-3 text-[12px] text-roseDeep">{error}</div> : null}
             </div>
@@ -184,7 +193,7 @@ export function VoiceJournal() {
         {/* RIGHT: Calendar */}
         <div className="space-y-3">
           <div className="px-1">
-            <div className="font-display text-[20px] italic text-textDark">Your reflection history</div>
+            <div className="font-display text-[24px] italic text-textDark">Mood Time Capsules 🪄</div>
             <div className="mt-1 text-[12px] text-textSoft">
               Tap a day with dots to reopen what you noticed.
             </div>
