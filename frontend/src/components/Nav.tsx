@@ -8,7 +8,7 @@ export function Nav() {
     <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-5">
       <div className="flex items-center justify-between">
         <div className="font-display text-[22px] tracking-tight text-textDark">
-          Future Fighter
+          Future Mirror
         </div>
         <nav className="flex items-center gap-2 rounded-full border border-glassBorder bg-glassBg px-2 py-1 backdrop-blur-[16px] [-webkit-backdrop-filter:blur(16px)]">
           <NavLink
