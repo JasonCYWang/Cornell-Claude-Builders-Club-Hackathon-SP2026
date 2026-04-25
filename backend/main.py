@@ -193,13 +193,33 @@ def calendar_summary(db: Session = Depends(get_db)):
 
 
 @app.post("/future-self/reflection")
-async def future_self_reflection(payload: dict):
+async def future_self_reflection(payload: dict, db: Session = Depends(get_db)):
     question = (payload.get("question") or "").strip()
     future_self_type = (payload.get("futureSelfType") or "").strip()
     journal_summary = (payload.get("journalSummary") or "").strip()
     pattern = (payload.get("patternDetected") or "").strip()
     roast_mode = bool(payload.get("roastMode"))
     reality_check = bool(payload.get("realityCheck"))
+
+    # Pull recent journal entries to provide real background context.
+    # Keep this bounded so we don't blow token limits.
+    recent = (
+        db.query(JournalEntry)
+        .order_by(JournalEntry.date.desc())
+        .limit(10)
+        .all()
+    )
+    recent = list(reversed(recent))  # oldest -> newest
+    journal_background_lines: list[str] = []
+    for e in recent:
+        date_str = e.date.isoformat() if e.date else e.date_key
+        transcript = (e.transcript or "").strip()
+        note = (e.note or "").strip()
+        if transcript:
+            journal_background_lines.append(f"- {date_str}: {transcript}")
+        if note:
+            journal_background_lines.append(f"  Note: {note}")
+    journal_background = "\n".join(journal_background_lines).strip()
 
     # If Gemini isn't configured (or errors), `generate_future_self_letter` returns
     # a built-in fallback letter. We also return `source` so the frontend can tell.
@@ -208,6 +228,7 @@ async def future_self_reflection(payload: dict):
         question=question,
         journal_summary=journal_summary,
         pattern=pattern,
+        journal_background=journal_background,
         roast_mode=roast_mode,
         reality_check=reality_check,
     )
