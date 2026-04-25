@@ -194,11 +194,18 @@ async def future_self_reflection(payload: dict):
     journal_summary = (payload.get("journalSummary") or "").strip()
     pattern = (payload.get("patternDetected") or "").strip()
 
+    # If Gemini isn't configured (or errors), `generate_future_self_letter` returns
+    # a built-in fallback letter. We also return `source` so the frontend can tell.
     letter = await generate_future_self_letter(
         future_self_type=future_self_type,
         question=question,
         journal_summary=journal_summary,
         pattern=pattern,
     )
-    return {"letter": letter, "futureSelfType": future_self_type}
+    is_fallback = letter.startswith("There’s a quiet loop in what you wrote")
+    return {
+        "letter": letter,
+        "futureSelfType": future_self_type,
+        "source": "fallback" if is_fallback else "gemini",
+    }
 

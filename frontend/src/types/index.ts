@@ -48,5 +48,6 @@ export type FutureSelfMeta = {
 export type ReflectionResponse = {
   letter: string
   futureSelfType: FutureSelfType
+  source?: 'gemini' | 'fallback'
 }
 

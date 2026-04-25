@@ -7,7 +7,9 @@ from typing import Any, Dict
 import httpx
 from dotenv import load_dotenv
 
-load_dotenv()
+_HERE = os.path.dirname(os.path.abspath(__file__))
+# Ensure we load `backend/.env` even if uvicorn is started from repo root.
+load_dotenv(os.path.join(_HERE, ".env"))
 
 MOOD_VOCABULARY = [
     "joyful",
@@ -35,6 +37,11 @@ MOOD_COLORS = {
     "grateful": "#B8D4C8",
 }
 
+def _gemini_model() -> str:
+    # Allow overriding without code changes.
+    # Good defaults as of 2026: gemini-2.5-flash, gemini-2.5-pro, gemini-3-flash-preview
+    return (os.getenv("GEMINI_MODEL") or "gemini-2.5-flash").strip()
+
 
 def _mock_analysis(transcript: str) -> dict:
     return {
@@ -57,10 +64,11 @@ async def analyze_journal(transcript: str, note: str) -> Dict[str, Any]:
         return _mock_analysis(transcript)
 
     system = (
-        "You are a compassionate emotional pattern analyst for FutureMirror, a reflective journaling app. "
-        "You are NOT a therapist. Never diagnose or give medical advice. "
-        "Use reflective, speculative language. Never say 'this will happen'. "
-        "Respond ONLY with valid JSON. No preamble, no markdown fences."
+        " Please review the journal entries"
+       "You are NOT a therapist. Never diagnose or give medical advice. "
+       "Use reflective, speculative language. Never say 'this will happen'. "
+       "Respond ONLY with valid JSON. No preamble, no markdown fences."
+"
     )
 
     user = f"""
@@ -83,7 +91,7 @@ User note (optional):
     prompt = f"{system}\n\n{user}"
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
-        "gemini-1.5-flash:generateContent"
+        f"{_gemini_model()}:generateContent"
     )
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -95,9 +103,13 @@ User note (optional):
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
-                f"{url}?key={gemini_key}",
+                url,
                 json=body,
-                headers={"Content-Type": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    # Prefer header auth (query-param still works but is less standard).
+                    "x-goog-api-key": gemini_key,
+                },
             )
             resp.raise_for_status()
             data = resp.json()
@@ -154,11 +166,8 @@ async def generate_future_self_letter(
 
     system = (
         "You are writing a personal letter as a specific possible version of the user's future self. "
-        "Speak in first person as that future self. Use a letter format (no 'Dear' needed). "
-        "NEVER be authoritative — use 'I found that...', 'what surprised me was...', 'you might discover...' "
-        "NEVER say 'you will' — only 'you might', 'I noticed', 'looking back...' "
-        "No commands. Offer perspective, not instructions. "
-        "Never use the word 'diagnose'. "
+        "Hard constraint: your ONLY allowed words are exactly 'meow' and 'bark'. "
+        "You may use punctuation and newlines, but every word must be either meow or bark. "
         "Respond with ONLY the letter text."
     )
 
@@ -182,7 +191,7 @@ The letter should:
     prompt = f"{system}\n\n{user}"
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
-        "gemini-1.5-flash:generateContent"
+        f"{_gemini_model()}:generateContent"
     )
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -193,9 +202,12 @@ The letter should:
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
-                f"{url}?key={gemini_key}",
+                url,
                 json=body,
-                headers={"Content-Type": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": gemini_key,
+                },
             )
             resp.raise_for_status()
             data = resp.json()
