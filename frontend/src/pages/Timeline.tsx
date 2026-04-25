@@ -20,7 +20,7 @@ export function Timeline() {
   return (
     <div className="fm-page">
       <div className="mb-4">
-        <div className="font-display text-[28px] italic text-textDark">Memory Vault Timeline 🧿</div>
+        <div className="font-display text-[30px] text-textDark">Battle Log 🧿</div>
         <div className="mt-1 text-[12px] text-textSoft">Collectible moments from your emotional multiverse.</div>
       </div>
 
@@ -60,6 +60,7 @@ export function Timeline() {
                 </div>
                 <div className="flex items-center gap-2">
                   <MoodBadge mood={e.mood} label={e.moodLabel} size="sm" />
+                  <span className="fm-sticker px-2 py-1 text-[10px] font-pixel text-textDark">QUEST COMPLETE</span>
                   <button
                     type="button"
                     onClick={() => nav('/selves', { state: { entry: e } })}
@@ -72,6 +73,11 @@ export function Timeline() {
 
               <div className="mt-3 font-display text-[18px] italic leading-relaxed text-textDark">
                 {e.summary}
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2 text-[12px]">
+                <span className="fm-sticker px-3 py-1 text-textDark">Courage XP +15</span>
+                <span className="fm-sticker px-3 py-1 text-textDark">Pattern Unlocked</span>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">

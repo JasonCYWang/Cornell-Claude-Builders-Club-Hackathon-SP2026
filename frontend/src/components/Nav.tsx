@@ -7,8 +7,8 @@ export function Nav() {
   return (
     <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-5">
       <div className="flex items-center justify-between">
-        <div className="font-display text-[20px] italic tracking-tight text-textDark">
-          FutureMirror
+        <div className="font-display text-[22px] tracking-tight text-textDark">
+          Future Fighter
         </div>
         <nav className="flex items-center gap-2 rounded-full border border-glassBorder bg-glassBg px-2 py-1 backdrop-blur-[16px] [-webkit-backdrop-filter:blur(16px)]">
           <NavLink
@@ -21,7 +21,7 @@ export function Nav() {
             }
             end
           >
-            Dashboard
+            Home Base
           </NavLink>
           <NavLink
             to="/journal"
@@ -32,7 +32,7 @@ export function Nav() {
               ].join(' ')
             }
           >
-            Journal
+            Train
           </NavLink>
           <NavLink
             to="/selves"
@@ -43,7 +43,7 @@ export function Nav() {
               ].join(' ')
             }
           >
-            Future Selves
+            Fighter Builder
           </NavLink>
           <NavLink
             to="/timeline"
@@ -54,7 +54,7 @@ export function Nav() {
               ].join(' ')
             }
           >
-            Timeline
+            Battle Log
           </NavLink>
         </nav>
       </div>

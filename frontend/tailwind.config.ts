@@ -20,8 +20,9 @@ export default {
         glassBorder: 'var(--glass-border)',
       },
       fontFamily: {
-        display: ['"Fraunces"', 'serif'],
-        sans: ['"DM Sans"', 'sans-serif'],
+        display: ['"Bungee"', 'sans-serif'],
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        pixel: ['"Press Start 2P"', 'monospace'],
       },
       borderRadius: {
         glass: '20px',
