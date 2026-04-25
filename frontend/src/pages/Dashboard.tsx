@@ -54,38 +54,6 @@ export function Dashboard() {
         </div>
       </GlassCard>
 
-      <div className="grid gap-5 md:grid-cols-2">
-        <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(255,126,217,0.24),rgba(86,186,255,0.18),rgba(255,177,102,0.2))]">
-          <div className="font-display text-[26px] text-textDark">Today’s Mirror Moment ✨</div>
-          <div className="mt-2 text-[13px] leading-relaxed text-textMid">{todayCopy}</div>
-
-          {latest ? (
-            <div className="mt-5 space-y-3">
-              <MoodBadge mood={latest.mood} label={latest.moodLabel} size="lg" />
-              <div className="font-ai text-[22px] italic leading-relaxed text-textDark">{latest.summary}</div>
-              <PatternBanner text={latest.patternDetected} />
-            </div>
-          ) : (
-            <div className="mt-5 text-[13px] text-textSoft">
-              Open <span className="text-textMid">Train</span> to start your first session.
-            </div>
-          )}
-        </GlassCard>
-
-        <GlassCard className="p-5 bg-[linear-gradient(135deg,rgba(123,91,255,0.2),rgba(255,126,217,0.2),rgba(86,186,255,0.16))]">
-          <div className="font-display text-[26px] text-textDark">Pattern Callout 👀</div>
-          <div className="mt-2 text-[13px] leading-relaxed text-textMid">
-            Emotional decision simulator mode is active.
-          </div>
-          <div className="mt-5 grid grid-cols-2 gap-3 text-[12px]">
-            <div className="fm-sticker px-4 py-3 text-textDark">Quest Complete</div>
-            <div className="fm-sticker px-4 py-3 text-textDark">Pattern Unlocked</div>
-            <div className="fm-sticker px-4 py-3 text-textDark">Future Cringe Avoided</div>
-            <div className="fm-sticker px-4 py-3 text-textDark">Reality Check Available</div>
-          </div>
-        </GlassCard>
-      </div>
-
       <div className="space-y-3">
         <div className="px-1">
           <div className="font-display text-[28px] text-textDark">Pick Your Future Fighter 🎮</div>

@@ -74,16 +74,6 @@ const FUTURE_SELVES: FutureSelfMeta[] = [
     weakness: 'Can romanticize chaos',
     specialMove: 'Turns fear into plot momentum',
   },
-  {
-    id: 'risk-taker',
-    name: 'Risk-Taker Fighter',
-    subtitle: 'Acts before fear disappears.',
-    emoji: '🚀',
-    gradientClass: 'bg-gradient-to-br from-[rgba(255,177,102,0.5)] to-[rgba(255,126,217,0.2)]',
-    strength: 'Action bias',
-    weakness: 'Overcommitting',
-    specialMove: 'Launches the first move immediately',
-  },
 ]
 
 export function FutureSelves() {
