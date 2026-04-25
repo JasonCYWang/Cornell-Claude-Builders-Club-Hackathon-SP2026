@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
 import {
@@ -7,23 +7,12 @@ import {
   type QuestionnaireAnswers,
 } from '../components/FutureSelfQuestionnaire'
 import { GlassCard } from '../components/GlassCard'
-import { MoodBadge } from '../components/MoodBadge'
-import { PatternBanner } from '../components/PatternBanner'
-import { useJournalEntries } from '../hooks/useJournalEntries'
 
 export function Dashboard() {
   const navigate = useNavigate()
-  const { entries, loading } = useJournalEntries()
-  const latest = entries[0]
   const [questionnaire, setQuestionnaire] = useState<QuestionnaireAnswers | null>(() =>
     getStoredQuestionnaire(),
   )
-
-  const todayCopy = useMemo(() => {
-    if (loading) return 'Listening for your latest reflection…'
-    if (!latest) return 'Your story hasn’t been written yet. Begin with a breath.'
-    return 'A small mirror of what you’ve been carrying lately.'
-  }, [latest, loading])
 
   return (
     <div className="fm-page space-y-5">
