@@ -1,12 +1,15 @@
-from flask import Flask, render_template_string, request
+from flask import Flask, render_template_string, request, jsonify
 from google import genai
 from google.genai import types
 import os
+from journal import Journal
 
+journal = Journal()
 app = Flask(__name__)
 
-# Your working client setup (unchanged)
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+futureselfInstructions = "You are the chatters future self in 10 years. You are going to look at what they are saying and how things have turned out or how the chatter should think. You should be positive about the future and not give any specific details of their life in the future"
 
 HTML = """
 <!DOCTYPE html>
@@ -131,11 +134,10 @@ HTML = """
             <button class="tab-button" onclick="openTab('suggestions', this)">Suggestions</button>
             <button class="tab-button" onclick="openTab('habits', this)">Habit Tracker</button>
             <button class="tab-button" onclick="openTab('questionnaire', this)">Questionnaire</button>
-            <button class="tab-button" onclick="openTab('futureSelf', this)">Future Self</button>
+            <button class="tab-button" onclick="openFutureSelfTab(this)">Future Self</button>
         </nav>
 
         <main class="content">
-
             <section id="journals" class="tab-content active">
                 <h2>Journal Entries</h2>
                 <p>Write a new entry or view previous reflections.</p>
@@ -144,37 +146,26 @@ HTML = """
                     <label for="prompt"><strong>New Journal Entry</strong></label>
                     <textarea name="prompt" rows="7" placeholder="Write about your day, worries, goals, or thoughts..."></textarea>
                     <br>
-                    <button class="submit-btn" type="submit">Save / Reflect</button>
+                    <button class="submit-btn" type="submit">Save Journal Entry</button>
                 </form>
 
-                {% if sendingPrompt %}
-                    <h3>Latest Entry</h3>
-                    <div class="journal-card">
-                        <strong>Date:</strong> Today<br>
-                        <p>{{ sendingPrompt }}</p>
-                    </div>
-                {% endif %}
-
                 <h3>Previous Entries</h3>
-                <div class="journal-card">
-                    <strong>Example Entry</strong>
-                    <p class="placeholder">Previous journal entries will appear here later.</p>
-                </div>
 
-                {% if response_text %}
-                    <h3>AI Reflection</h3>
-                    <pre>{{ response_text }}</pre>
+                {% if entries %}
+                    {% for entry in entries %}
+                        <div class="journal-card">
+                            <strong>{{ entry.timestamp }}</strong>
+                            <p>{{ entry.text }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="placeholder">No journal entries yet.</p>
                 {% endif %}
             </section>
 
             <section id="suggestions" class="tab-content">
                 <h2>Suggestions</h2>
                 <p class="placeholder">AI-generated suggestions will go here later.</p>
-
-                <div class="journal-card">
-                    <strong>Example Suggestion</strong>
-                    <p>Take one small step toward your goal today.</p>
-                </div>
             </section>
 
             <section id="habits" class="tab-content">
@@ -201,14 +192,13 @@ HTML = """
 
             <section id="futureSelf" class="tab-content">
                 <h2>Talk to Your Future Self</h2>
-                <p class="placeholder">This tab can later become a chat-style interface.</p>
+                <p>Your future self will look at your saved journal entries and respond.</p>
 
                 <div class="journal-card">
-                    <strong>Future Self Preview</strong>
-                    <p>Your future self responses will appear here.</p>
+                    <strong>Future Self Response</strong>
+                    <pre id="futureSelfResponse">Click the Future Self tab to generate a response.</pre>
                 </div>
             </section>
-
         </main>
     </div>
 
@@ -223,6 +213,24 @@ HTML = """
             document.getElementById(tabId).classList.add("active");
             button.classList.add("active");
         }
+
+        async function openFutureSelfTab(button) {
+            openTab('futureSelf', button);
+
+            const responseBox = document.getElementById("futureSelfResponse");
+            responseBox.textContent = "Thinking as your future self...";
+
+            try {
+                const response = await fetch("/future-self", {
+                    method: "POST"
+                });
+
+                const data = await response.json();
+                responseBox.textContent = data.response;
+            } catch (error) {
+                responseBox.textContent = "ERROR: " + error;
+            }
+        }
     </script>
 </body>
 </html>
@@ -230,34 +238,51 @@ HTML = """
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    sendingPrompt = ""
-    response_text = ""
+    entries = journal.get_entries()
 
     if request.method == "POST":
         sendingPrompt = request.form.get("prompt")
-        print("sending prompt is:", sendingPrompt)
+        print("journal entry is:", sendingPrompt)
 
-        try:
-            response = client.models.generate_content(
-                model="gemini-3-flash-preview",
-                config=types.GenerateContentConfig(
-                    system_instruction="you are the users"
-                ),
-                contents=sendingPrompt
-            )
-
-            response_text = response.text
-            print("response is:", response_text)
-
-        except Exception as e:
-            response_text = "ERROR: " + str(e)
-            print(response_text)
+        if sendingPrompt:
+            journal.add_entry(sendingPrompt)
+            entries = journal.get_entries()
 
     return render_template_string(
         HTML,
-        sendingPrompt=sendingPrompt,
-        response_text=response_text
+        entries=entries
     )
+
+@app.route("/future-self", methods=["POST"])
+def future_self():
+    entries = journal.get_entries()
+
+    if not entries:
+        return jsonify({
+            "response": "Write at least one journal entry first, then come back to hear from your future self."
+        })
+
+    journal_text = ""
+    for entry in entries:
+        journal_text += f"{entry['timestamp']} - {entry['text']}\\n"
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            config=types.GenerateContentConfig(
+                system_instruction=futureselfInstructions
+            ),
+            contents=journal_text
+        )
+
+        return jsonify({
+            "response": response.text
+        })
+
+    except Exception as e:
+        return jsonify({
+            "response": "ERROR: " + str(e)
+        })
 
 if __name__ == "__main__":
     app.run(debug=True)
