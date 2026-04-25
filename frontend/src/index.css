@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #faf7f2;
+  --warm-white: #fdf9f5;
+  --lavender: #c8c0d8;
+  --lavender-deep: #9b8fb0;
+  --mist: #b8cdd8;
+  --rose: #d4b8b8;
+  --rose-deep: #c49898;
+  --sage: #b8cdb8;
+  --text-dark: #2c2420;
+  --text-mid: #6b5e58;
+  --text-soft: #9b8b84;
+  --glass-bg: rgba(253, 249, 245, 0.72);
+  --glass-border: rgba(200, 192, 216, 0.35);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  color: var(--text-dark);
+  background: var(--ivory);
+}
+
+/* Background orbs */
+.fm-orb {
+  position: fixed;
+  inset: auto;
+  width: 420px;
+  height: 420px;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+.fm-orb--lavender {
+  background: radial-gradient(circle at 30% 30%, rgba(200, 192, 216, 0.95), rgba(200, 192, 216, 0));
+  top: -140px;
+  left: -120px;
+}
+.fm-orb--mist {
+  background: radial-gradient(circle at 30% 30%, rgba(184, 205, 216, 0.95), rgba(184, 205, 216, 0));
+  top: 30%;
+  right: -160px;
+}
+.fm-orb--rose {
+  background: radial-gradient(circle at 30% 30%, rgba(212, 184, 184, 0.95), rgba(212, 184, 184, 0));
+  bottom: -180px;
+  left: 25%;
+}
+
+/* Page transition */
+.fm-page {
+  animation: fm-fade-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes fm-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mic pulse ring (CSS only) */
+.fm-mic-pulse {
+  animation: fm-pulse 1.6s ease-in-out infinite;
+}
+@keyframes fm-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  55% {
+    transform: scale(1.18);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+}
+
