@@ -18,7 +18,7 @@ export function LetterDisplay({
         {loading ? <div className="text-[12px] text-textSoft">Writing…</div> : null}
       </div>
       {subtitle ? <div className="mt-1 text-[12px] text-textSoft">{subtitle}</div> : null}
-      <div className="mt-4 whitespace-pre-wrap font-display text-[19px] italic leading-[1.7] text-textDark">
+      <div className="mt-4 whitespace-pre-wrap font-ai text-[24px] italic leading-[1.7] text-textDark">
         {text || 'Select a future self to receive a letter.'}
       </div>
     </GlassCard>

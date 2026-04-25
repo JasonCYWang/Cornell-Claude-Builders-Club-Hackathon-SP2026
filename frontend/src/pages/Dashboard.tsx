@@ -73,7 +73,7 @@ export function Dashboard() {
           {latest ? (
             <div className="mt-5 space-y-3">
               <MoodBadge mood={latest.mood} label={latest.moodLabel} size="lg" />
-              <div className="text-[15px] leading-relaxed text-textDark">{latest.summary}</div>
+              <div className="font-ai text-[22px] italic leading-relaxed text-textDark">{latest.summary}</div>
               <PatternBanner text={latest.patternDetected} />
             </div>
           ) : (

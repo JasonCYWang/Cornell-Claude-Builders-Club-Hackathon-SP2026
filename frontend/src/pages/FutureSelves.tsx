@@ -91,6 +91,18 @@ export function FutureSelves() {
   const { entries } = useJournalEntries()
 
   const preloadedEntry = (location.state as { entry?: JournalEntry } | null)?.entry
+  const lifeMapMilestone = (
+    location.state as
+      | {
+          lifeMapMilestone?: {
+            age: number
+            title: string
+            description: string
+            fighterType: FutureSelfType
+          }
+        }
+      | null
+  )?.lifeMapMilestone
   const activeEntry = preloadedEntry || entries[0] || null
 
   const [selected, setSelected] = useState<FutureSelfType>('ceo')
@@ -138,6 +150,14 @@ export function FutureSelves() {
     // If navigated here from a day panel, generate a gentle opening letter automatically.
     if (preloadedEntry) {
       void generate({ allowEmptyQuestion: true })
+      return
+    }
+    if (lifeMapMilestone) {
+      setSelected(lifeMapMilestone.fighterType)
+      setQuestion(
+        `I am at the ${lifeMapMilestone.title} checkpoint around age ${lifeMapMilestone.age}. ${lifeMapMilestone.description} What should I focus on next?`,
+      )
+      void generate({ allowEmptyQuestion: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -153,7 +173,7 @@ export function FutureSelves() {
             </div>
             <MoodBadge mood={activeEntry.mood} label={activeEntry.moodLabel} size="md" />
           </div>
-          <div className="mt-3 font-display text-[18px] italic leading-relaxed text-textDark">
+          <div className="mt-3 font-ai text-[23px] italic leading-relaxed text-textDark">
             {activeEntry.summary}
           </div>
           <div className="mt-4">

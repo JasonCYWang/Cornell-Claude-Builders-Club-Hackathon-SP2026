@@ -54,7 +54,7 @@ export function Nav() {
               ].join(' ')
             }
           >
-            Battle Log
+            Life Map
           </NavLink>
         </nav>
       </div>

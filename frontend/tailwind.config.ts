@@ -23,6 +23,7 @@ export default {
         display: ['"Bungee"', 'sans-serif'],
         sans: ['"Space Grotesk"', 'sans-serif'],
         pixel: ['"Press Start 2P"', 'monospace'],
+        ai: ['"Cormorant Garamond"', 'serif'],
       },
       borderRadius: {
         glass: '20px',

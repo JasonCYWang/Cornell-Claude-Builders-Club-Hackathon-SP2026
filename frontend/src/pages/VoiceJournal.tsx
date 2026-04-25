@@ -172,14 +172,14 @@ export function VoiceJournal() {
                 <span className="fm-sticker px-3 py-1 text-textDark">+15 Courage XP</span>
                 <span className="fm-sticker px-3 py-1 text-textDark">Pattern Unlocked</span>
               </div>
-              <div className="mt-3 font-display text-[18px] italic leading-relaxed text-textDark">
+              <div className="mt-3 font-ai text-[24px] italic leading-relaxed text-textDark">
                 {lastEntry.summary}
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {lastEntry.emotionalThemes.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-3 py-1 text-[12px] text-textMid"
+                    className="rounded-full border border-glassBorder bg-[rgba(253,249,245,0.62)] px-3 py-1 font-ai text-[16px] italic text-textMid"
                   >
                     {t}
                   </span>
@@ -189,7 +189,7 @@ export function VoiceJournal() {
                 <PatternBanner text={lastEntry.patternDetected} />
               </div>
               {lastEntry.nextQuestion ? (
-                <div className="mt-4 rounded-glass border border-glassBorder bg-[rgba(253,249,245,0.62)] px-4 py-3 text-[13px] text-textMid">
+                <div className="mt-4 rounded-glass border border-glassBorder bg-[rgba(253,249,245,0.62)] px-4 py-3 font-ai text-[18px] italic text-textMid">
                   <span className="text-textSoft">Next question:</span> {lastEntry.nextQuestion}
                 </div>
               ) : null}

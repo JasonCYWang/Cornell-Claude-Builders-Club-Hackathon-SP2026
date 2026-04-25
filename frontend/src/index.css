@@ -51,12 +51,12 @@ body {
   left: -120px;
 }
 .fm-orb--mist {
-  background: radial-gradient(circle at 30% 30%, rgba(86, 186, 255, 0.92), rgba(86, 186, 255, 0));
+  background: radial-gradient(circle at 30% 30%, rgba(142, 209, 253, 0.92), rgba(86, 186, 255, 0));
   top: 30%;
   right: -160px;
 }
 .fm-orb--rose {
-  background: radial-gradient(circle at 30% 30%, rgba(255, 126, 217, 0.92), rgba(255, 126, 217, 0));
+  background: radial-gradient(circle at 30% 30%, rgba(255, 193, 236, 0.92), rgba(255, 126, 217, 0));
   bottom: -180px;
   left: 25%;
 }
