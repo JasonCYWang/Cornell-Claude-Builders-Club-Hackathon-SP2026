@@ -57,5 +57,5 @@ mypy src
 Notes
 - Activate virtual environment before installing dependencies.
 - Ensure dependencies are installed if commands are missing.
-- Do not commit .env file.
+- Do not commit .env file
 
